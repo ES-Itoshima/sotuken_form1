@@ -1,47 +1,56 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container mx-auto p-4">
+    <nav-bar 
+      :current-page="currentPage" 
+      @change-page="currentPage = $event"
+    />
+    
+    <upload-page 
+      v-if="currentPage === 'upload'"
+      @image-saved="handleImageSaved"
+    />
+    
+    <gallery-page 
+      v-if="currentPage === 'gallery'"
+      :images="images"
+      @delete-image="deleteImage"
+    />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script>
+import NavBar from './components/NavBar.vue'
+import UploadPage from './components/UploadPage.vue'
+import GalleryPage from './components/GalleryPage.vue'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+export default {
+  components: {
+    NavBar,
+    UploadPage,
+    GalleryPage
+  },
+  data() {
+    return {
+      currentPage: 'upload',
+      images: []
+    }
+  },
+  mounted() {
+    const savedImages = localStorage.getItem('savedImages')
+    if (savedImages) {
+      this.images = JSON.parse(savedImages)
+    }
+  },
+  methods: {
+    handleImageSaved(imageData) {
+      this.images.push(imageData)
+      localStorage.setItem('savedImages', JSON.stringify(this.images))
+      this.currentPage = 'gallery'
+    },
+    deleteImage(index) {
+      this.images.splice(index, 1)
+      localStorage.setItem('savedImages', JSON.stringify(this.images))
+    }
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
 }
-</style>
+</script>
