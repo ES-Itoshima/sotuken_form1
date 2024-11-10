@@ -2,54 +2,60 @@
   <div class="container mx-auto p-4">
     <nav-bar 
       :current-page="currentPage" 
-      @change-page="currentPage = $event"
+      @change-page="changePage"
     />
     
-    <upload-page 
+    <upload-flow 
       v-if="currentPage === 'upload'"
-      @image-saved="handleImageSaved"
+      @book-saved="handleBookSaved"
     />
     
-    <gallery-page 
+    <book-gallery 
       v-if="currentPage === 'gallery'"
-      :images="images"
-      @delete-image="deleteImage"
+      :books="books"
+      @delete-book="deleteBook"
     />
   </div>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
-import UploadPage from './components/UploadPage.vue'
-import GalleryPage from './components/GalleryPage.vue'
+import UploadFlow from './components/UploadFlow.vue'
+import BookGallery from './components/BookGallery.vue'
 
 export default {
   components: {
     NavBar,
-    UploadPage,
-    GalleryPage
+    UploadFlow,
+    BookGallery
   },
   data() {
     return {
       currentPage: 'upload',
-      images: []
+      books: []
     }
   },
   mounted() {
-    const savedImages = localStorage.getItem('savedImages')
-    if (savedImages) {
-      this.images = JSON.parse(savedImages)
+    const savedBooks = localStorage.getItem('savedBooks')
+    if (savedBooks) {
+      this.books = JSON.parse(savedBooks)
     }
   },
   methods: {
-    handleImageSaved(imageData) {
-      this.images.push(imageData)
-      localStorage.setItem('savedImages', JSON.stringify(this.images))
+    changePage(page) {
+      this.currentPage = page
+    },
+    handleBookSaved(bookData) {
+      this.books.push({
+        ...bookData,
+        createdAt: new Date().toISOString()
+      })
+      localStorage.setItem('savedBooks', JSON.stringify(this.books))
       this.currentPage = 'gallery'
     },
-    deleteImage(index) {
-      this.images.splice(index, 1)
-      localStorage.setItem('savedImages', JSON.stringify(this.images))
+    deleteBook(index) {
+      this.books.splice(index, 1)
+      localStorage.setItem('savedBooks', JSON.stringify(this.books))
     }
   }
 }
