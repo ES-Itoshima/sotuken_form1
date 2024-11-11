@@ -1,3 +1,4 @@
+<!-- src/components/BookGallery.vue -->
 <template>
   <div class="book-gallery">
     <h2 class="text-2xl mb-4">書籍ギャラリー</h2>
@@ -102,30 +103,12 @@
           </button>
         </div>
       </div>
-
-      <div v-if="isImageClipperVisible" class="image-clipper-modal">
-        <ImageClipper
-          :imageUrl="selectedBookImageUrl"
-          @image-clipped="handleImageClipped"
-        />
-      </div>
-
-      <div v-if="isImageAnnotatorVisible" class="image-annotator-modal">
-        <ImageAnnotator :clippedImageData="clippedImageData" />
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import ImageClipper from './clip_annnotation/ImageAnnotator.vue'
-import ImageAnnotator from './clip_annnotation/ImageAnnotator.vue'
-
 export default {
-  components: {
-    ImageClipper,
-    ImageAnnotator
-  },
   props: {
     books: {
       type: Array,
@@ -135,22 +118,12 @@ export default {
   data() {
     return {
       largeImageUrl: null,
-      fullDescription: null,
-      isImageClipperVisible: false,
-      isImageAnnotatorVisible: false,
-      selectedBookImageUrl: null,
-      clippedImageData: null
+      fullDescription: null
     }
   },
   methods: {
     showLargeImage(imageUrl) {
-      this.selectedBookImageUrl = imageUrl
-      this.isImageClipperVisible = true
-    },
-    handleImageClipped(data) {
-      this.clippedImageData = data
-      this.isImageClipperVisible = false
-      this.isImageAnnotatorVisible = true
+      this.largeImageUrl = imageUrl
     },
     showFullDescription(description) {
       this.fullDescription = description
@@ -326,20 +299,5 @@ tr:hover {
 
 .hover\:underline:hover {
   text-decoration: underline;
-}
-
-
-.image-clipper-modal,
-.image-annotator-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
 }
 </style>
