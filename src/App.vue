@@ -17,7 +17,6 @@
     />
   </div>
 </template>
-
 <script>
 import NavBar from './components/NavBar.vue'
 import UploadFlow from './components/UploadFlow.vue'
