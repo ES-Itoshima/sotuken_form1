@@ -17,7 +17,7 @@
             <th class="py-3 px-4 text-left border-b">出版社</th>
             <th class="py-3 px-4 text-left border-b">ISBN</th>
             <th class="py-3 px-4 text-left border-b">説明</th>
-            <th class="py-3 px-4 text-left border-b w-24">操作</th>
+            <th class="py-3 px-4 text-left border-b w-36">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -26,7 +26,6 @@
             :key="index"
             class="hover:bg-gray-50 border-b"
           >
-            <!-- 画像サムネイル -->
             <td class="py-2 px-4">
               <img 
                 :src="book.imageUrl" 
@@ -35,8 +34,6 @@
                 @click="showLargeImage(book.imageUrl)"
               >
             </td>
-            
-            <!-- 書籍情報 -->
             <td class="py-2 px-4">
               <div class="font-medium">{{ book.title }}</div>
             </td>
@@ -57,15 +54,21 @@
                 </button>
               </div>
             </td>
-            
-            <!-- 操作ボタン -->
             <td class="py-2 px-4">
-              <button
-                @click="$emit('delete-book', index)"
-                class="delete-button"
-              >
-                削除
-              </button>
+              <div class="flex space-x-2">
+                <button
+                  @click="$emit('delete-book', index)"
+                  class="delete-button"
+                >
+                  削除
+                </button>
+                <button 
+                  @click="$emit('show-annotation', index)"
+                  class="annotation-button"
+                    >
+                  アノテーション
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -299,5 +302,21 @@ tr:hover {
 
 .hover\:underline:hover {
   text-decoration: underline;
+}
+
+.annotation-button {
+  padding: 8px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  font-size: 0.875rem;
+  display: inline-block;
+}
+
+.annotation-button:hover {
+  background-color: #2563eb;
 }
 </style>

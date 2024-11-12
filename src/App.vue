@@ -14,24 +14,35 @@
       v-if="currentPage === 'gallery'"
       :books="books"
       @delete-book="deleteBook"
+      @show-annotation="handleShowAnnotation"
+    />
+
+    <book-annotation
+      v-if="currentPage === 'annotation'"
+      :book-id="selectedBookId"
+      @back="currentPage = 'gallery'"
     />
   </div>
 </template>
+
 <script>
 import NavBar from './components/NavBar.vue'
 import UploadFlow from './components/UploadFlow.vue'
 import BookGallery from './components/BookGallery.vue'
+import BookAnnotation from './components/annotator/BookAnnotation.vue'
 
 export default {
   components: {
     NavBar,
     UploadFlow,
-    BookGallery
+    BookGallery,
+    BookAnnotation
   },
   data() {
     return {
       currentPage: 'upload',
-      books: []
+      books: [],
+      selectedBookId: null
     }
   },
   mounted() {
@@ -55,6 +66,10 @@ export default {
     deleteBook(index) {
       this.books.splice(index, 1)
       localStorage.setItem('savedBooks', JSON.stringify(this.books))
+    },
+    handleShowAnnotation(bookId) {
+      this.selectedBookId = bookId
+      this.currentPage = 'annotation'
     }
   }
 }
